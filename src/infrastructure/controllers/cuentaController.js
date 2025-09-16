@@ -1,8 +1,8 @@
-import CreateCuenta from "../../application/use-cases/cliente/CreateCuenta.js";
-import GetCuenta from "../../application/use-cases/cliente/GetCuenta.js";
-import GetCuentaById from "../../application/use-cases/cliente/GetCuenta.js";
-import UpdateCuenta from "../../application/use-cases/cliente/UpdateCuenta.js";
-import DeleteCuenta from "../../application/use-cases/cliente/DeleteCuenta.js";
+import CreateCuenta from "../../application/use-cases/CreateCuenta.js";
+import GetCuenta from "../../application/use-cases/GetCuenta.js";
+import GetCuentaById from "../../application/use-cases/GetCuentaById.js";
+import UpdateCuenta from "../../application/use-cases/UpdateCuenta.js";
+import DeleteCuenta from "../../application/use-cases/DeleteCuenta.js";
 import CuentaRepositoryMongo from "../repositories/CuentaRepositoryMongo.js";
 
 const cuentaRepository = new CuentaRepositoryMongo();
@@ -34,19 +34,19 @@ export const createCuenta = async (req, res) => {
  * Controlador para obtener todos los clientes.
  *
  * @async
- * @function getClientes
+ * @function getCuenta
  * @param {import("express").Request} req
  * @param {import("express").Response} res
- * @returns {Promise<void>} Retorna un arreglo de clientes en formato JSON.
+ * @returns {Promise<void>} Retorna un arreglo de cuentas en formato JSON.
  *
  * @example
  * // GET /clientes
  */
-export const getCuentas = async (req, res) => {
+export const getCuenta = async (req, res) => {
   try {
-    const useCase = new GetCuentasUseCase(cuentaRepository);
-    const cuentas = await useCase.execute();
-    res.json(cuentas);
+    const useCase = new GetCuenta(cuentaRepository);
+    const cuenta = await useCase.execute();
+    res.json(cuenta);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -66,7 +66,7 @@ export const getCuentas = async (req, res) => {
  */
 export const getCuentaById = async (req, res) => {
   try {
-    const useCase = new GetCuentaByIdUseCase(cuentaRepository);
+    const useCase = new GetCuentaById(cuentaRepository);
     const cuenta = await useCase.execute(req.params.id);
     if (!cuenta) return res.status(404).json({ message: "Cuenta no encontrada" });
     res.json(cuenta);
@@ -117,6 +117,32 @@ export const deleteCuenta = async (req, res) => {
     const result = await useCase.execute(req.params.id);
     if (!result) return res.status(404).json({ message: "Cuenta no encontrada" });
     res.json({ message: "Cuenta eliminada correctamente" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+export const consignar = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { monto } = req.body;
+    const useCase = new ConsignarCuenta(cuentaRepository);
+    const cuenta = await useCase.execute(id, { monto });
+    if (!cuenta) return res.status(404).json({ message: "Cuenta no encontrada" });
+    res.json(cuenta);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+export const retirar = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { monto } = req.body;
+    const useCase = new RetirarCuenta(cuentaRepository);
+    const cuenta = await useCase.execute(id, { monto });
+    if (!cuenta) return res.status(404).json({ message: "Cuenta no encontrada" });
+    res.json(cuenta);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

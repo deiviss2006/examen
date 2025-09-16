@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createCuenta, getCuentas, getCuentaById, updateCuenta, deleteCuenta } from "../controllers/cuentaController.js";
+import { createCuenta, getCuenta, getCuentaById, updateCuenta, deleteCuenta, consignar, retirar } from "../controllers/cuentaController.js";
 
 const router = Router();
 
@@ -31,7 +31,7 @@ router.post("/", createCuenta);
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Array<Object>} Lista de cuentas.
  */
-router.get("/", getCuentas);
+router.get("/", getCuenta);
 
 /**
  * Obtiene una cuenta por su ID.
@@ -72,5 +72,9 @@ router.put("/:id", updateCuenta);
  * @returns {Object} Mensaje de confirmación o error 404 si no existe.
  */
 router.delete("/:id", deleteCuenta);
+
+router.post("/consignar/:id", consignar);
+
+router.put("/retirar/:id", retirar);
 
 export default router;

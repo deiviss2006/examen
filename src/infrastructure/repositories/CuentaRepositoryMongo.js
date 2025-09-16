@@ -88,6 +88,14 @@ class CuentaRepositoryMongo {
   async delete(id) {
     return await CuentaModel.findByIdAndDelete(id);
   }
+
+  async consignar(id, monto) {
+    return await CuentaModel.findByIdAndUpdate(id, { $inc: { saldo: monto } }, { new: true });
+  }
+
+  async retirar(id, monto) {
+    return await CuentaModel.findByIdAndUpdate(id, { $inc: { saldo: -monto } }, { new: true });
+  }
 }
 
 export default CuentaRepositoryMongo;
