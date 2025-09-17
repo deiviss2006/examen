@@ -22,7 +22,8 @@ import mongoose from "mongoose";
  */
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
+  const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/examen";
+  await mongoose.connect(uri, {
       useNewUrlParser: true,       // Usa el nuevo parser de URL
       useUnifiedTopology: true     // Usa el nuevo motor de gestión de conexiones
     });

@@ -9,11 +9,12 @@ class Cuenta {
    * @param {number} params.NumeroCuenta - Número de cuenta del cliente.
    * @param {number} params.Saldo - Saldo de la cuenta del cliente.
    */
-  constructor({ id, NombreCliente, NumeroCuenta, Saldo }) {
+  constructor({ id, NombreCliente, NumeroCuenta, Saldo, contadorTransacciones = 0 }) {
     this.id = id;
     this.NombreCliente = NombreCliente;
     this.NumeroCuenta = NumeroCuenta;
     this.Saldo = Saldo;
+    this.contadorTransacciones = contadorTransacciones;
   }
 }
 

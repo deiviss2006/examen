@@ -22,6 +22,12 @@ const router = Router();
  */
 router.post("/", createCuenta);
 
+// Consignar dinero a una cuenta
+router.post("/:id/consignar", consignar);
+
+// Retirar dinero de una cuenta
+router.post("/:id/retirar", retirar);
+
 /**
  * Obtiene todas las cuentas.
  * @name GET /

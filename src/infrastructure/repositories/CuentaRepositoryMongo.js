@@ -1,3 +1,4 @@
+// ...existing code...
 import mongoose from "mongoose";
 
 /**
@@ -14,7 +15,8 @@ import mongoose from "mongoose";
 const CuentaSchema = new mongoose.Schema({
   nombreCliente: { type: String, unique: true, required: true },
   NumeroCuenta: { type: Number, required: true },
-  saldo: { type: Number, required: true }
+  saldo: { type: Number, required: true },
+  contadorTransacciones: { type: Number, default: 0 }
 });
 
 /**
@@ -95,6 +97,9 @@ class CuentaRepositoryMongo {
 
   async retirar(id, monto) {
     return await CuentaModel.findByIdAndUpdate(id, { $inc: { saldo: -monto } }, { new: true });
+  }
+  async actualizarContadorTransacciones() {
+    return await CuentaModel.updateMany({ contadorTransacciones: { $exists: false } }, { $set: { contadorTransacciones: 0 } });
   }
 }
 

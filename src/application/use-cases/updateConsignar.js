@@ -1,5 +1,5 @@
 
-export default class UpdateCuenta {
+export default class UpdateConsignar {
   /**
    * Constructor de la clase UpdateCuenta.
    *
@@ -32,7 +32,15 @@ export default class UpdateCuenta {
    *
    * console.log("Cliente actualizado:", clienteActualizado);
    */
-  async execute(id, cuentaData) {
-    return await this.cuentaRepository.update(id, cuentaData);
+  async execute(id, monto) {
+    // Sumar el monto al saldo y aumentar el contador de transacciones
+    const cuentaActualizada = await this.cuentaRepository.consignar(id, monto);
+    if (cuentaActualizada) {
+      // Incrementar el contador de transacciones
+      await this.cuentaRepository.update(id, { contadorTransacciones: (cuentaActualizada.contadorTransacciones || 0) + 1 });
+      // Obtener la cuenta actualizada final
+      return await this.cuentaRepository.findById(id);
+    }
+    return null;
   }
 }

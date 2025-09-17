@@ -1,5 +1,5 @@
 
-export default class UpdateCuenta {
+export default class UpdateRetirar {
   /**
    * Constructor de la clase UpdateCuenta.
    *
@@ -32,7 +32,16 @@ export default class UpdateCuenta {
    *
    * console.log("Cliente actualizado:", clienteActualizado);
    */
-  async execute(id, cuentaData) {
-    return await this.cuentaRepository.update(id, cuentaData);
+  async execute(id, monto) {
+    // Restar el monto al saldo y aumentar el contador de transacciones
+    const cuentaActualizada = await this.cuentaRepository.retirar(id, monto);
+    if (cuentaActualizada) {
+      // Incrementar el contador de transacciones
+      await this.cuentaRepository.update(id, { contadorTransacciones: (cuentaActualizada.contadorTransacciones || 0) + 1 });
+      // Obtener la cuenta actualizada final
+      const cuentaFinal = await this.cuentaRepository.findById(id);
+      return cuentaFinal;
+    }
+    return null;
   }
 }
